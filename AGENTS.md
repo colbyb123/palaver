@@ -15,4 +15,4 @@ Palaver is a local-first, single-user dashboard and a Rust learning project. The
 - Use idiomatic Rust and TypeScript. Prefer composition and straightforward functions. Introduce traits at meaningful integration boundaries and justify new dependencies.
 - Keep native Windows development and deployment viable. Isolate platform-specific startup and scheduling from feature code so Linux remains feasible.
 - Test new business rules and changed boundaries. Run relevant formatting, lint, type, test, and build checks once their tooling exists. Document commands and results in the PR; distinguish native Windows verification from Linux checks.
-- Update repository docs when behavior or build and run instructions change. Use focused branches and GitHub PRs for review.
+- Update repository docs when behavior or build and run instructions change. Branch from `dev` using names such as `feature/...`, `fix/...`, or `docs/...`; open focused PRs into `dev`. Promote reviewed changes from `dev` to `main` with a separate PR. See the [GitHub workflow](docs/roadmap.md#github-workflow).
