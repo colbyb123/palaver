@@ -2,6 +2,28 @@
 
 Palaver currently runs as a Rust HTTP server and a separate frontend development server. Native Windows is the primary target. The same backend can be built and run on Linux. The server listens on your own machine at `127.0.0.1:8080` by default.
 
+## Start Palaver
+
+Complete the [one-time setup](#one-time-setup) first, including `npm ci --prefix frontend`. Then open **two terminals**, both in the repository root (`palaver/`, the directory containing `backend/` and `frontend/`). These commands work in PowerShell and Bash:
+
+1. In the first terminal, start the backend and leave it running:
+
+   ```sh
+   cargo run --locked --manifest-path backend/Cargo.toml -- serve
+   ```
+
+2. In the second terminal, start the frontend and leave it running:
+
+   ```sh
+   npm run dev --prefix frontend
+   ```
+
+3. Open the **Local** URL printed by Vite, usually [http://127.0.0.1:5173](http://127.0.0.1:5173). The page should display **Backend status: Connected**. If it says unavailable, check that the backend is running and select **Retry**. Press Ctrl+C in each terminal to stop its server.
+
+The browser connects to Vite, which proxies `/api` requests to the backend at `127.0.0.1:8080`. The Rust server does not currently serve the frontend. `npm run build --prefix frontend` produces static files in `frontend/dist/`, but starting the backend alone will not serve those files.
+
+All npm commands in this guide use `--prefix frontend` and run from the repository root. If your terminal is already in `frontend/`, omit `--prefix frontend` instead: for example, `npm run dev`. The repository root has no `package.json`.
+
 ## One-time setup
 
 You need Git, the Rust toolchain and a C++ compiler for the backend, and Node.js **24.22.3** with npm for the frontend. The first installation and builds require internet access. No database server is needed. Use native PowerShell on Windows or a Bash terminal on Ubuntu/Debian; open a new terminal after installing tools so PATH changes take effect.
@@ -87,7 +109,7 @@ The repository root has no `package.json`: run npm commands with `--prefix front
 
 In VS Code, open the repository folder and install the [rust-analyzer extension](https://rust-analyzer.github.io/book/installation.html). If the editor reports an old Rust toolchain after a pin update, run **Developer: Reload Window**.
 
-## Run and smoke-test
+## Check the backend directly
 
 From the repository root in PowerShell or a Linux shell:
 
@@ -119,15 +141,7 @@ cargo build --locked
 
 These are the checks run by the [Windows CI job](../.github/workflows/ci.yml). See the [backend bootstrap plan](architecture/backend-bootstrap.md) for the API contract.
 
-## Run the frontend
-
-After completing the one-time setup and with the backend running as above, open another terminal at the repository root:
-
-```sh
-npm run dev --prefix frontend
-```
-
-Open the printed Vite URL. The screen shows whether the backend responds; if it is unavailable, start the backend and select **Retry**. The frontend development server listens on loopback and proxies `/api` to `http://127.0.0.1:8080`. This proxy is only for development.
+## Use a different backend port
 
 If the backend uses another port, set `PALAVER_API_ORIGIN` before starting Vite. In PowerShell, use `$env:PALAVER_API_ORIGIN = "http://127.0.0.1:8090"` and later `Remove-Item Env:PALAVER_API_ORIGIN`. On Linux, use `PALAVER_API_ORIGIN=http://127.0.0.1:8090 npm run dev --prefix frontend`. Restart Vite after changing it.
 
@@ -136,12 +150,11 @@ If the backend uses another port, set `PALAVER_API_ORIGIN` before starting Vite.
 From the repository root:
 
 ```sh
-cd frontend
-npm ci
-npm run lint
-npm run typecheck
-npm test
-npm run build
+npm ci --prefix frontend
+npm run lint --prefix frontend
+npm run typecheck --prefix frontend
+npm test --prefix frontend
+npm run build --prefix frontend
 ```
 
 The Windows CI job runs these checks. For a native Windows browser smoke test, confirm the connected status, stop the backend and use Retry to see unavailable, then restart it and retry successfully.
