@@ -2,7 +2,7 @@
 
 Palaver is a local-first, modular personal dashboard for daily puzzles, news, and more. The first planned feature is a puzzle dashboard for finding daily games, recording results, and reviewing history and statistics.
 
-The repository is in the foundation stage. The Rust backend uses Axum and Tokio and exposes a local health endpoint. The React and TypeScript frontend and SQLite persistence are planned.
+The repository is in the foundation stage. The Rust backend exposes a local health endpoint, and the React and TypeScript frontend displays its connection status. SQLite persistence is planned.
 
 - [Architecture overview](docs/architecture/overview.md)
 - [Architecture decision records](docs/adr/README.md)

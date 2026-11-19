@@ -1,12 +1,12 @@
 # Frontend bootstrap plan
 
-**Status:** Proposed for review under [issue #2](https://github.com/colbyb123/palaver/issues/2). Tooling choices below are recommendations, not accepted architectural decisions.
+**Status:** Implemented following [issue #2](https://github.com/colbyb123/palaver/issues/2). See the code and development guide for current behavior and verification.
 
 ## Tooling and layout
 
 - Put the frontend in `frontend/` and scaffold it with Vite's React and TypeScript template.
-- Use npm, commit `package-lock.json`, and use `npm ci` for repeatable installs. Pin a Node.js LTS version supported by the selected Vite release, document it, and use that version in CI. Select and record the concrete version when implementing so its compatibility can be verified.
-- Keep the bootstrap small: use the templdimension (rows, columns, channels)ate's ESLint and TypeScript configuration, and add Vitest and React Testing Library for component behavior tests. Avoid routing, a component library, and a global state library until needed.
+- Use npm, commit `package-lock.json`, and use `npm ci` for repeatable installs. Pin Node.js 24.22.3 in `.nvmrc`, document it, and use it in CI.
+- Keep the bootstrap small: use the template's ESLint and TypeScript configuration, and add Vitest and React Testing Library for component behavior tests. Avoid routing, a component library, and a global state library until needed.
 
 ## Local development and API
 
