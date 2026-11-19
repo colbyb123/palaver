@@ -11,4 +11,14 @@ The repository is in the foundation stage. The Rust backend exposes a local heal
 
 ## Local development
 
-See the [local development guide](docs/development.md) for Windows and Linux prerequisites, VS Code setup, how to run the backend, and how to run the CI checks.
+After the [one-time setup](docs/development.md#one-time-setup), start these commands in two terminals from the repository root:
+
+```sh
+cargo run --locked --manifest-path backend/Cargo.toml -- serve
+```
+
+```sh
+npm run dev --prefix frontend
+```
+
+Open the Local URL printed by Vite in your browser. See the [local development guide](docs/development.md) for setup, details, and checks.
