@@ -1,6 +1,6 @@
 # Backend bootstrap plan
 
-**Status:** Accepted following review of [issue #1](https://github.com/colbyb123/palaver/issues/1).
+**Status:** Accepted following review of [issue #1](https://github.com/colbyb123/palaver/issues/1). The bootstrap is implemented; this plan is historical. See the code and [development guide](../development.md) for current behavior, and the issue and CI for outstanding review and verification.
 
 The first backend PR should start a native Windows HTTP process, expose a small health contract for [the frontend bootstrap](https://github.com/colbyb123/palaver/issues/2), and give contributors a repeatable way to build, test, and stop it. It follows the [architecture overview](overview.md) and [native runtime ADR](../adr/0004-native-runtime.md).
 

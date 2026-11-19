@@ -13,6 +13,6 @@
 
 Track work in GitHub Issues with a clear outcome, scope, and acceptance criteria. Use short-lived branches and focused PRs into `main`. Link the issue, describe verification, and review significant design changes before merging. Squash merging and required CI checks are proposed repository settings. A project board, label taxonomy, repository license, and visibility are administrative decisions.
 
-The baseline CI job checks whitespace in changes on pull requests and pushes to `main`. Add Rust formatting, Clippy, tests, and build checks with the Cargo project. Add frontend lint, type checking, tests, and production build with the frontend and its lockfile. Include a Windows build and test run when the backend exists. Add database integration tests with persistence.
+CI checks whitespace and runs Rust formatting, Clippy, tests, and build on Windows. See the [workflow](../.github/workflows/ci.yml) for the current checks. Add frontend lint, type checking, tests, and production build with the frontend and its lockfile. Add database integration tests with persistence.
 
 Release automation can build downloadable Windows artifacts once packaging is established, with Linux artifacts later. Local installation and Task Scheduler setup are separate from CI.
