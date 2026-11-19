@@ -1,3 +1,6 @@
 /backend/target/
 
 /.vscode/settings.json
+/frontend/node_modules/
+/frontend/dist/
+/frontend/*.tsbuildinfo
