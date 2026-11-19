@@ -9,22 +9,6 @@ The repository is in the foundation stage. The Rust backend uses Axum and Tokio 
 - [Roadmap and GitHub workflow](docs/roadmap.md)
 - [Contributor and coding-agent guidance](AGENTS.md)
 
-## Run the backend on Windows
+## Local development
 
-Install Rust through [rustup](https://rustup.rs/) with the native MSVC toolchain. Install Visual Studio Build Tools with the Desktop development with C++ workload and a Windows SDK. The repository selects the pinned Rust toolchain and its formatting and linting components.
-
-From the repository root in PowerShell:
-
-```powershell
-cargo run --locked --manifest-path backend/Cargo.toml -- serve
-```
-
-In a second terminal, check that the server responds with HTTP 200 and `{"status":"ok"}`:
-
-```powershell
-curl.exe -i http://127.0.0.1:8080/api/v1/health
-```
-
-Press Ctrl+C in the server terminal to stop it. To change the port for a new run, set `$env:PALAVER_PORT = "8090"` before starting the server. Use `Remove-Item Env:PALAVER_PORT` to return to the default. The server always binds to IPv4 loopback.
-
-See the [backend bootstrap plan](docs/architecture/backend-bootstrap.md) for the API contract and verification checklist.
+See the [local development guide](docs/development.md) for Windows and Linux prerequisites, VS Code setup, how to run the backend, and how to run the CI checks.
