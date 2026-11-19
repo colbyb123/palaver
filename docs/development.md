@@ -81,6 +81,8 @@ npm ci --prefix frontend
 
 [`frontend/.nvmrc`](../frontend/.nvmrc) records the Node version used by CI, but it does **not** install or switch Node automatically. The Windows installer steps above or `nvm use` on Linux select it. [`frontend/package.json`](../frontend/package.json) declares the frontend dependencies and commands; [`frontend/package-lock.json`](../frontend/package-lock.json) records their exact dependency tree. `npm ci` uses that lockfile to make a clean install in `frontend/node_modules`, replacing any existing `node_modules`. Run it again after pulling a changed lockfile. Do not edit either lockfile by hand; intentional dependency changes should update and commit the corresponding lockfile.
 
+The repository root has no `package.json`: run npm commands with `--prefix frontend` from the root, or change to `frontend` first and omit the prefix. If `npm ci` reports an out-of-sync lockfile, first check that your checkout is up to date and that `node --version` and `npm --version` match the pinned Node release and its bundled npm (11.19.1). Report a persistent mismatch rather than changing the lockfile just to install the project.
+
 ### Editor (optional)
 
 In VS Code, open the repository folder and install the [rust-analyzer extension](https://rust-analyzer.github.io/book/installation.html). If the editor reports an old Rust toolchain after a pin update, run **Developer: Reload Window**.
