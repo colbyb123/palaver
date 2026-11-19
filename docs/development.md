@@ -4,19 +4,64 @@ Palaver currently runs as a Rust HTTP server and a separate frontend development
 
 ## One-time setup
 
-- **Windows:** Install Git, then install Visual Studio Build Tools with **Desktop development with C++** and a Windows SDK. Install Rust via rustup and use the native MSVC toolchain. Open a fresh PowerShell window after installation. [Microsoft's Windows Rust setup guide](https://learn.microsoft.com/en-us/windows/dev-environment/rust/setup)
-- **Ubuntu or Debian:** Install Git, a compiler and linker, and curl with `sudo apt install git build-essential curl`. Install Rust through [rustup](https://rustup.rs/) and open a fresh terminal.
-- **Frontend (Windows or Linux):** Install Node.js 24.22.3 and npm. The pinned version is also recorded in `frontend/.nvmrc`; use a Node version manager if desired.
-- **VS Code:** Open the repository folder and install the **rust-analyzer** extension. The repo's toolchain file includes `rust-src` for editor analysis. If the editor still reports an old toolchain after a pin update, run **Developer: Reload Window**. [rust-analyzer installation guide](https://rust-analyzer.github.io/book/installation.html)
+You need Git, the Rust toolchain and a C++ compiler for the backend, and Node.js **24.22.3** with npm for the frontend. The first installation and builds require internet access. No database server is needed. Use native PowerShell on Windows or a Bash terminal on Ubuntu/Debian; open a new terminal after installing tools so PATH changes take effect.
 
-Clone the repo if needed and enter it. The existing clone can be used directly.
+### Windows
+
+1. Install [Git for Windows](https://git-scm.com/install/windows), accepting the option to use Git from the command line.
+2. Install [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/). In the installer, select **Desktop development with C++** and a Windows SDK, then install the selected components.
+3. Download and run [rustup-init.exe](https://rustup.rs/) and choose the default native MSVC installation. See [Microsoft's Rust setup guide](https://learn.microsoft.com/en-us/windows/dev-environment/rust/setup) if you need help with the C++ prerequisites.
+4. Open the [Node.js 24.22.3 download archive](https://nodejs.org/en/download/archive/v24.22.3). Under Installer Packages, download and run the Windows `.msi` for your machine (usually x64; use ARM64 for Windows on ARM). Keep the installer options for npm and adding Node to PATH enabled. npm comes with this Node installer; it does not need a separate installation.
+5. Close and reopen PowerShell, then check that the tools are available:
+
+   ```powershell
+   git --version
+   rustup --version
+   node --version
+   npm --version
+   ```
+
+   `node --version` should print `v24.22.3`; `npm --version` should print a version number. If a command is not found, reopen the terminal and check the installer/PATH. If PowerShell blocks `npm.ps1` because of its execution policy, use `npm.cmd` in place of `npm` in the commands below, or consult your administrator about the policy.
+
+### Ubuntu or Debian
+
+Install Git and the native build tools, then install Rust with rustup:
+
+```bash
+sudo apt update
+sudo apt install git build-essential curl ca-certificates
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+Follow the rustup prompts, then open a new terminal. Install [nvm](https://github.com/nvm-sh/nvm#installing-and-updating), a per-user Node version manager, using its published installer:
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.7/install.sh | bash
+```
+
+Open a new terminal so nvm is loaded, then install Node and its bundled npm:
+
+```bash
+nvm install 24.22.3
+nvm use 24.22.3
+git --version
+rustup --version
+node --version
+npm --version
+```
+
+`node --version` should print `v24.22.3`; `npm --version` should print a version number. If `nvm` is not found after reopening the terminal, follow the troubleshooting steps in the [nvm installation guide](https://github.com/nvm-sh/nvm#installing-and-updating). You can later run `nvm use` from `frontend/` to select the version in `.nvmrc`.
+
+### Get the project and install its dependencies
+
+In PowerShell or Bash, clone the repository and enter it. If you already have a clone, open a terminal in its root instead.
 
 ```sh
 git clone https://github.com/colbyb123/palaver.git
 cd palaver
 ```
 
-From the repo root, install and confirm the selected toolchain:
+From the repository root, install the Rust version and components selected by the project, then check them:
 
 ```sh
 rustup toolchain install --no-self-update
@@ -24,7 +69,21 @@ rustc --version
 cargo --version
 ```
 
-[`rust-toolchain.toml`](../rust-toolchain.toml) selects the Rust version and installs formatting, linting, and standard library sources. Cargo fetches the Rust dependencies during the first build using the committed lockfile. The initial build needs internet access. The backend itself needs no Node.js, database service, or scheduled task.
+[`rust-toolchain.toml`](../rust-toolchain.toml) tells rustup which Rust release, rustfmt, Clippy, and editor sources to use when working in this repository. Cargo downloads the backend dependencies on the first build; `--locked` tells it to use the committed [`backend/Cargo.lock`](../backend/Cargo.lock) without changing the resolved versions.
+
+Install the frontend dependencies from the repository root:
+
+```sh
+node --version
+npm --version
+npm ci --prefix frontend
+```
+
+[`frontend/.nvmrc`](../frontend/.nvmrc) records the Node version used by CI, but it does **not** install or switch Node automatically. The Windows installer steps above or `nvm use` on Linux select it. [`frontend/package.json`](../frontend/package.json) declares the frontend dependencies and commands; [`frontend/package-lock.json`](../frontend/package-lock.json) records their exact dependency tree. `npm ci` uses that lockfile to make a clean install in `frontend/node_modules`, replacing any existing `node_modules`. Run it again after pulling a changed lockfile. Do not edit either lockfile by hand; intentional dependency changes should update and commit the corresponding lockfile.
+
+### Editor (optional)
+
+In VS Code, open the repository folder and install the [rust-analyzer extension](https://rust-analyzer.github.io/book/installation.html). If the editor reports an old Rust toolchain after a pin update, run **Developer: Reload Window**.
 
 ## Run and smoke-test
 
@@ -60,10 +119,9 @@ These are the checks run by the [Windows CI job](../.github/workflows/ci.yml). S
 
 ## Run the frontend
 
-With the backend running as above, open another terminal at the repository root:
+After completing the one-time setup and with the backend running as above, open another terminal at the repository root:
 
 ```sh
-npm ci --prefix frontend
 npm run dev --prefix frontend
 ```
 
